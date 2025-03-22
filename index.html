@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResumeMatch AI</title>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --background: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-dark: #212529;
+            --text-light: #6c757d;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #e71d36;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        header {
+            padding: 1.5rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            background-color: var(--card-bg);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+        }
+        
+        .hero {
+            padding: 5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+        }
+        
+        .hero-content {
+            flex: 1;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+        
+        .hero-image {
+            flex: 1;
+            position: relative;
+            animation: floatImage 4s ease-in-out infinite;
+        }
+        
+        .upload-area {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+        
+        .upload-area-inner {
+            border: 2px dashed #dde1e7;
+            border-radius: 8px;
+            padding: 3rem 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .upload-area-inner:hover {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .upload-subtext {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .features {
+            padding: 5rem 0;
+            background-color: #f8f9fa;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--primary-light), var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .results-section {
+            padding: 4rem 0;
+            display: none;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .results-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .result-content {
+            color: var(--text-light);
+        }
+        
+        .match-percentage {
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--primary);
+        }
+        
+        .progress-ring {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .progress-ring circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        .skill-match {
+            margin-top: 2rem;
+        }
+        
+        .skill-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .skill-tag {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+        
+        .skill-tag.matched {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+        
+        .skill-tag.missing {
+            background-color: rgba(231, 29, 54, 0.1);
+            color: var(--danger);
+        }
+        
+        .resume-data {
+            margin-top: 2rem;
+        }
+        
+        .data-item {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .data-label {
+            font-weight: 600;
+            width: 100px;
+        }
+        
+        .data-value {
+            color: var(--text-light);
+        }
+        
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(67, 97, 238, 0.05), rgba(247, 37, 133, 0.05));
+        }
+        
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -200px;
+            animation: moveShape 20s ease-in-out infinite;
+        }
+        
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            left: -150px;
+            animation: moveShape 15s ease-in-out infinite reverse;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes floatImage {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        @keyframes moveShape {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(5%, 5%);
+            }
+            50% {
+                transform: translate(0, 10%);
+            }
+            75% {
+                transform: translate(-5%, 5%);
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2H2v10h10V2z"></path>
+                        <path d="M22 12h-10v10h10V12z"></path>
+                        <path d="M12 12H2v10h10V12z"></path>
+                        <path d="M22 2h-10v10h10V2z"></path>
+                    </svg>
+                    ResumeMatch AI
+                </div>
+                <div class="nav-links">
+                    <a href="#">Home</a>
+                    <a href="#">Features</a>
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                </div>
+                <button class="cta-button">Get Started</button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="background-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">AI-Powered Resume Matching</h1>
+                <p class="hero-description">Match your resume against job requirements with our advanced AI system. Get detailed insights and improve your chances of landing your dream job.</p>
+                <div class="upload-area">
+                    <div class="upload-area-inner">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <h3 class="upload-text">Drag & Drop Your Resume</h3>
+                        <p class="upload-subtext">or click to browse your files (PDF format)</p>
+                        <button class="cta-button">Upload Resume</button>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/api/placeholder/500/400" alt="Resume Analysis Illustration">
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Smart Skill Analysis</h3>
+                    <p class="feature-description">Our AI automatically extracts skills from your resume and compares them with job requirements to find the perfect match.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-Time Processing</h3>
+                    <p class="feature-description">Get instant results with our advanced PDF parsing technology that analyzes your resume in seconds.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                            <line x1="4" y1="22" x2="4" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Personalized Recommendations</h3>
+                    <p class="feature-description">Receive tailored suggestions to improve your resume and increase your match score for specific job positions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results-section" id="results">
+        <div class="container">
+            <h2 class="section-title">Analysis Results</h2>
+            <div class="results-grid">
+                <div class="results-card">
+                    <h3 class="result-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        Resume Information
+                    </h3>
+                    <div class="resume-data">
+                        <div class="data-item">
+                            <div class="data-label">Name:</div>
+                            <div class="data-value">Sourav Narvekar</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Email:</div>
+                            <div class="data-value">sourav@example.com</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Phone:</div>
+                            <div class="data-value">+1 (555) 123-4567</div>
+                        </div>
+                    </div>
+                    <div class="skill-match">
+                        <h4 class="skill-title">Extracted Skills</h4>
+                        <div class="skill-tags">
+                            <div class="skill-tag">Python</div>
+                            <div class="skill-tag">Machine Learning</div>
+                            <div class="skill-tag">Data Analysis</div>
+                            <div class="skill-tag">JavaScript</div>
+                            <div class="skill-tag">SQL</div>
+                            <div class="skill-tag">React</div>
+                            <div class="skill-tag">Node.js</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="results-card">
+                    <h3 class="result-title">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Job Match Results
+                    </h3>
+                    <div class="match-percentage">
+                        <svg class="progress-ring" width="150" height="150">
+                            <circle
+                                stroke="#f0f0f0"
+                                stroke-width="10"
+                                fill="transparent"
+                                r="65"
+                                cx="75"
+                                cy="75"
+                            />
+                            <circle
+                                stroke="#4361ee"
+                                stroke-width="10"
+                                fill="transparent"
+                                r="65"
+                                cx="75"
+                                cy="75"
+                                stroke-dasharray="408.4"
+                                stroke-dashoffset="102.1"
+                                transform="rotate(-90 75 75)"
+                            />
+                            <text
+                                x="75"
+                                y="85"
+                                fill="#212529"
+                                font-size="28"
+                                text-anchor="middle"
+                                font-weight="bold"
+                            >75%</text>
+                        </svg>
+                    </div>
+                    <div class="skill-match">
+                        <h4 class="skill-title">Skills Match</h4>
+                        <div class="skill-tags">
+                            <div class="skill-tag matched">Python</div>
+                            <div class="skill-tag matched">Data Analysis</div>
+                            <div class="skill-tag missing">AWS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Show results section on file upload (for demo purposes)
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            document.getElementById('results').style.display = 'block';
+            // Scroll to results section
+            setTimeout(() => {
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
