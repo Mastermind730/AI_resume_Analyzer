@@ -353,7 +353,7 @@ def visualize_skills_match(matched, missing, filename):
     
     plt.figure(figsize=(10, 6))
     plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
-    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle
+    plt.axis('equal')  
     plt.title('Skills Match Analysis')
     
     # Add legend with the actual skills
@@ -491,7 +491,6 @@ def rank_candidates(results):
     print(tabulate(table_data, headers=headers, tablefmt="grid"))
     return ranked
 
-# NEW FUNCTION: Find suitable jobs for a candidate
 def find_suitable_jobs(resume_data, job_database):
     """Find suitable jobs for a candidate based on their skills and experience"""
     suitable_jobs = []
@@ -518,7 +517,6 @@ def find_suitable_jobs(resume_data, job_database):
     
     return suitable_jobs[:5]  # Return top 5 suitable jobs
 
-# NEW FUNCTION: Load job database from JSON file
 def load_job_database(file_path):
     """Load job database from JSON file"""
     try:
@@ -531,7 +529,6 @@ def load_job_database(file_path):
         print(f"Error: Could not parse job database file {file_path}.")
         return []
 
-# NEW FUNCTION: Analyze job description text
 def analyze_job_description(job_text):
     """Extract skills, experience, and certifications from job description text"""
     doc = nlp(job_text)
@@ -630,7 +627,6 @@ def analyze_job_description(job_text):
     
     return job_data
 
-# NEW FUNCTION: Save job data to database
 def save_job_to_database(job_data, database_file):
     """Save a job to the job database"""
     job_database = []
